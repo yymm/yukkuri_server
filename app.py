@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify, url_for
 import os
 import commands
 import datetime
@@ -24,6 +24,12 @@ def echo_yukkuri(word):
     wav_file = yukkuri_wav(word)
     return render_template('yukkuri.html', **locals())
 
+@app.route("/yukkuri/api/<word>")
+def yukkuri_api(word):
+    wav_file = yukkuri_wav(word)
+    return jsonify(wav=url_for('static', filename=wav_file),
+                    word=word.encode('utf-8'))
+
 if __name__ == "__main__":
     app.debug = True
-    app.run(host='192.168.5.222', port=10001)
+    app.run()
